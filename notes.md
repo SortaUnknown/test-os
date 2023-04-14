@@ -7,3 +7,7 @@ enforced demarcation of unsafetyness in unsafe functions via `#[deny(unsafe_op_i
 **3.4 Allocator Designs**
 minimal deviation in Fixed-Size Block Allocator implementation, due to changes in Rust syntax
 bump allocator implementation is interesting, but useless. prune in future
+
+**4.1 Async/Await**
+destructuring no longer required
+simple executor is also interesting, but useless. prune in future

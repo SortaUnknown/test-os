@@ -7,7 +7,6 @@
 extern crate alloc;
 
 use core::panic::PanicInfo;
-use alloc::boxed::Box;
 use bootloader::BootInfo;
 use bootloader::entry_point;
 use x86_64::VirtAddr;
@@ -15,6 +14,9 @@ use test_os::println;
 use test_os::memory;
 use test_os::memory::BootInfoFrameAllocator;
 use test_os::allocator;
+use test_os::task::Task;
+use test_os::task::executor::Executor;
+use test_os::task::keyboard::print_keypresses;
 
 entry_point!(kernel_start);
 
@@ -31,15 +33,26 @@ fn kernel_start(boot_info: &'static BootInfo) -> !
 
     allocator::init_heap(&mut mapper, &mut frame_allocator).expect("heap initialization failed");
 
-    let heap_value = Box::new(41);
-    println!("heap value at {:p}", heap_value);
-
     #[cfg(test)]
     test_main();
 
     println!("End of Kernel");
-    
-    test_os::hlt_loop();
+
+    let mut executor = Executor::new();
+    executor.spawn(Task::new(example_task()));
+    executor.spawn(Task::new(print_keypresses()));
+    executor.run();
+}
+
+async fn async_number() -> u8
+{
+    42
+}
+
+async fn example_task()
+{
+    let number = async_number().await;
+    println!("async number: {}", number);
 }
 
 //default panic
