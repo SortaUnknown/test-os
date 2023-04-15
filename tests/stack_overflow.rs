@@ -3,15 +3,10 @@
 #![feature(abi_x86_interrupt)]
 
 use core::panic::PanicInfo;
-use test_os::serial_print;
-use test_os::serial_println;
-use test_os::QemuExitCode;
-use test_os::exit_qemu;
-use x86_64::structures::idt::InterruptDescriptorTable;
-use x86_64::structures::idt::InterruptStackFrame;
+use test_os::{serial_print, serial_println, exit_qemu, QemuExitCode};
+use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
 use lazy_static::lazy_static;
-use bootloader::BootInfo;
-use bootloader::entry_point;
+use bootloader::{BootInfo, entry_point};
 
 entry_point!(kernel_start);
 

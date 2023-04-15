@@ -1,8 +1,6 @@
 use linked_list_allocator::Heap;
-use alloc::alloc::Layout;
-use alloc::alloc::GlobalAlloc;
-use core::ptr::null_mut;
-use core::ptr::NonNull;
+use alloc::alloc::{Layout, GlobalAlloc};
+use core::ptr::{null_mut, NonNull};
 use core::mem;
 use super::Locked;
 

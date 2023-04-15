@@ -17,5 +17,5 @@ for fixed size allocator, usize can be cast to ptr safely
 volatile crate replaced with core::ptr::read_volatile() and write_volatile()
 bootloader full update requires major crate system rewrite, including dropping bootimage dep and changing the tests system, pushing back for now
 
-**Compiling for x86_64-unknown-none**
+**Compiling for x86_64-unknown-none [NOGO]**
 compile results in panic "Mapping(PageAlreadyMapped(PhysFrame[4KiB]))"

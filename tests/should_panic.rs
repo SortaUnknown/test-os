@@ -5,12 +5,8 @@
 #![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
-use test_os::serial_println;
-use test_os::serial_print;
-use test_os::exit_qemu;
-use test_os::QemuExitCode;
-use bootloader::BootInfo;
-use bootloader::entry_point;
+use test_os::{serial_print, serial_println, exit_qemu, QemuExitCode};
+use bootloader::{BootInfo, entry_point};
 
 entry_point!(kernel_start);
 

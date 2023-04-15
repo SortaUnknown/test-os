@@ -6,8 +6,7 @@
 
 use core::panic::PanicInfo;
 use test_os::println;
-use bootloader::BootInfo;
-use bootloader::entry_point;
+use bootloader::{BootInfo, entry_point};
 
 entry_point!(kernel_start);
 

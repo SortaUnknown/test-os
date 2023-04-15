@@ -5,7 +5,6 @@ use core::ptr::read_volatile;
 use core::ptr::write_volatile;
 use lazy_static::lazy_static;
 use spin::Mutex;
-use x86_64::instructions::interrupts::without_interrupts;
 
 lazy_static!{pub static ref WRITER: Mutex<Writer> = Mutex::new(Writer{column_position: 0, color_code: ColorCode::new(Color::Yellow, Color::Black), buffer: unsafe {&mut *(0xb8000 as *mut Buffer)}});}
 
@@ -154,5 +153,5 @@ macro_rules! println
 #[doc(hidden)]
 pub fn _print(args: FormatArguments)
 {
-    without_interrupts(|| {WRITER.lock().write_fmt(args).unwrap();});
+    x86_64::instructions::interrupts::without_interrupts(|| {WRITER.lock().write_fmt(args).unwrap();});
 }

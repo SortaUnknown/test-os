@@ -1,13 +1,7 @@
-use x86_64::structures::paging::PageTable;
-use x86_64::structures::paging::OffsetPageTable;
-use x86_64::structures::paging::PhysFrame;
-use x86_64::structures::paging::Size4KiB;
-use x86_64::structures::paging::FrameAllocator;
+use x86_64::structures::paging::{PageTable, OffsetPageTable, PhysFrame, Size4KiB, FrameAllocator};
 use x86_64::registers::control::Cr3;
-use x86_64::VirtAddr;
-use x86_64::PhysAddr;
-use bootloader::bootinfo::MemoryMap;
-use bootloader::bootinfo::MemoryRegionType;
+use x86_64::{VirtAddr, PhysAddr};
+use bootloader::bootinfo::{MemoryMap, MemoryRegionType};
 
 #[deny(unsafe_op_in_unsafe_fn)]
 pub unsafe fn init(physical_memory_offset: VirtAddr) -> OffsetPageTable<'static>

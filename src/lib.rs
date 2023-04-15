@@ -20,9 +20,7 @@ use core::panic::PanicInfo;
 use x86_64::instructions::port::Port;
 
 #[cfg(test)]
-use bootloader::BootInfo;
-#[cfg(test)]
-use bootloader::entry_point;
+use bootloader::{BootInfo, entry_point};
 
 #[cfg(test)]
 entry_point!(kernel_start);

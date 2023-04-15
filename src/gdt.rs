@@ -1,11 +1,8 @@
 use x86_64::VirtAddr;
 use x86_64::structures::tss::TaskStateSegment;
-use x86_64::structures::gdt::GlobalDescriptorTable;
-use x86_64::structures::gdt::Descriptor;
-use x86_64::structures::gdt::SegmentSelector;
+use x86_64::structures::gdt::{GlobalDescriptorTable, Descriptor, SegmentSelector};
 use x86_64::instructions::tables::load_tss;
-use x86_64::instructions::segmentation::CS;
-use x86_64::instructions::segmentation::Segment;
+use x86_64::instructions::segmentation::{CS, Segment};
 use lazy_static::lazy_static;
 
 pub const DOUBLE_FAULT_IST_INDEX: u16 = 0;

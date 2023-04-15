@@ -3,10 +3,8 @@ pub mod keyboard;
 
 use core::future::Future;
 use core::pin::Pin;
-use core::task::Context;
-use core::task::Poll;
-use core::sync::atomic::AtomicU64;
-use core::sync::atomic::Ordering;
+use core::task::{Context, Poll};
+use core::sync::atomic::{AtomicU64, Ordering};
 use alloc::boxed::Box;
 
 pub struct Task

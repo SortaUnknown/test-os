@@ -1,12 +1,7 @@
-use x86_64::structures::idt::InterruptDescriptorTable;
-use x86_64::structures::idt::InterruptStackFrame;
-use x86_64::structures::idt::PageFaultErrorCode;
+use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame, PageFaultErrorCode};
 use x86_64::instructions::port::Port;
 use x86_64::registers::control::Cr2;
-use crate::println;
-use crate::print;
-use crate::gdt;
-use crate::hlt_loop;
+use crate::{print, println, gdt, hlt_loop};
 use lazy_static::lazy_static;
 use pic8259::ChainedPics;
 use spin::Mutex;

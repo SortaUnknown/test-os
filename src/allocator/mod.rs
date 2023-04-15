@@ -1,11 +1,7 @@
 pub mod fixed_size_block;
 
 use x86_64::structures::paging::mapper::MapToError;
-use x86_64::structures::paging::FrameAllocator;
-use x86_64::structures::paging::Mapper;
-use x86_64::structures::paging::Page;
-use x86_64::structures::paging::PageTableFlags;
-use x86_64::structures::paging::Size4KiB;
+use x86_64::structures::paging::{FrameAllocator, Mapper, Page, PageTableFlags, Size4KiB};
 use x86_64::VirtAddr;
 use spin::Mutex;
 use fixed_size_block::FixedSizeBlockAllocator;

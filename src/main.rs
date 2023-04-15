@@ -7,8 +7,7 @@
 extern crate alloc;
 
 use core::panic::PanicInfo;
-use bootloader::BootInfo;
-use bootloader::entry_point;
+use bootloader::{BootInfo, entry_point};
 use x86_64::VirtAddr;
 use test_os::println;
 use test_os::memory;
