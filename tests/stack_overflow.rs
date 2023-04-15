@@ -62,5 +62,5 @@ extern "x86-interrupt" fn test_double_fault_handler(_stack_frame: InterruptStack
 fn stack_overflow()
 {
     stack_overflow();
-    volatile::Volatile::new(0).read();
+    unsafe{core::ptr::read_volatile(&mut 0);}
 }

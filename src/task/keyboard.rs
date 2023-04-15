@@ -29,7 +29,7 @@ pub(crate) fn add_scancode(scancode: u8)
 pub async fn print_keypresses()
 {
     let mut scancodes = ScancodeStream::new();
-    let mut keyboard = Keyboard::new(pc_keyboard::layouts::Uk105Key, ScancodeSet1, HandleControl::Ignore);
+    let mut keyboard = Keyboard::new(ScancodeSet1::new(), pc_keyboard::layouts::Uk105Key, HandleControl::Ignore);
 
     while let Some(scancode) = scancodes.next().await
     {
@@ -70,17 +70,17 @@ impl Stream for ScancodeStream
         let queue = SCANCODE_QUEUE.try_get().expect("not initialized");
 
         //fast path
-        if let Ok(scancode) = queue.pop() {return Poll::Ready(Some(scancode));}
+        if let Some(scancode) = queue.pop() {return Poll::Ready(Some(scancode));}
 
         WAKER.register(cx.waker());
         match queue.pop()
         {
-            Ok(scancode) =>
+            Some(scancode) =>
             {
                 WAKER.take();
                 Poll::Ready(Some(scancode))
             }
-            Err(crossbeam_queue::PopError) => Poll::Pending
+            None => Poll::Pending
         }
     }
 }

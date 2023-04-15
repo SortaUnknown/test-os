@@ -7,12 +7,11 @@ edition = "2021"
 
 [dependencies]
 bootloader = { version = "0.9.23", features = ["map_physical_memory"]}
-linked_list_allocator = "0.9.0"
-pc-keyboard = "0.5.0"
-pic8259 = "0.10.3"
-spin = "0.9.6"
+linked_list_allocator = "0.10.5"
+pc-keyboard = "0.7.0"
+pic8259 = "0.10.4"
+spin = "0.9.8"
 uart_16550 = "0.2.18"
-volatile = "0.2.6"
 x86_64 = "0.14.10"
 
 [dependencies.lazy_static]
@@ -20,16 +19,16 @@ version = "1.4.0"
 features = ["spin_no_std"]
 
 [dependencies.crossbeam-queue]
-version = "0.2.1"
+version = "0.3.8"
 default-features = false
 features = ["alloc"]
 
 [dependencies.conquer-once]
-version = "0.2.0"
+version = "0.4.0"
 default-features = false
 
 [dependencies.futures-util]
-version = "0.3.4"
+version = "0.3.28"
 default-features = false
 features = ["alloc"]
 
