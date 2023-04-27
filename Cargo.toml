@@ -6,8 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bootloader = { version = "0.9.23", features = ["map_physical_memory"]}
+bootloader_api = "0.11.3"
 linked_list_allocator = "0.10.5"
+noto-sans-mono-bitmap = "0.2.0"
 pc-keyboard = "0.7.0"
 pic8259 = "0.10.4"
 spin = "0.9.8"
@@ -31,7 +32,6 @@ default-features = false
 version = "0.3.28"
 default-features = false
 features = ["alloc"]
-
 
 [package.metadata.bootimage]
 test-args = ["-device", "isa-debug-exit,iobase=0xf4,iosize=0x04", "-serial", "stdio"]

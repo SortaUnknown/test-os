@@ -8,19 +8,24 @@
 
 extern crate alloc;
 
-pub mod vga_buffer;
+//pub mod vga_buffer;
 pub mod serial;
 pub mod interrupts;
 pub mod gdt;
 pub mod memory;
 pub mod allocator;
 pub mod task;
+pub mod framebuffer;
 
 use core::panic::PanicInfo;
 use x86_64::instructions::port::Port;
+use bootloader_api::info::FrameBuffer;
+use spin::Mutex;
+
+pub static FRAME_BUFFER: Mutex<FrameBuffer> = None;
 
 #[cfg(test)]
-use bootloader::{BootInfo, entry_point};
+use bootloader_api::{BootInfo, entry_point};
 
 #[cfg(test)]
 entry_point!(kernel_start);
@@ -77,7 +82,7 @@ pub fn test_panic_handler(info: &PanicInfo) -> !
 
 //Entry point for "cargo test"
 #[cfg(test)]
-fn kernel_start(_boot_info: &'static BootInfo) -> !
+fn kernel_start(_boot_info: &'static mut BootInfo) -> !
 {
     test_main();
 

@@ -6,7 +6,7 @@ use core::panic::PanicInfo;
 use test_os::{serial_print, serial_println, exit_qemu, QemuExitCode};
 use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
 use lazy_static::lazy_static;
-use bootloader::{BootInfo, entry_point};
+use bootloader_api::{BootInfo, entry_point};
 
 entry_point!(kernel_start);
 
@@ -22,7 +22,7 @@ lazy_static!
     };
 }
 
-fn kernel_start(_boot_info: &'static BootInfo) -> !
+fn kernel_start(_boot_info: &'static mut BootInfo) -> !
 {
     serial_print!("stack_overflow::stack_overflow... ");
 

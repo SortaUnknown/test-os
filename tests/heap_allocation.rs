@@ -7,7 +7,7 @@
 extern crate alloc;
 
 use core::panic::PanicInfo;
-use bootloader::{BootInfo, entry_point};
+use bootloader_api::{BootInfo, entry_point};
 use test_os::allocator::HEAP_SIZE;
 use test_os::allocator;
 use test_os::memory::BootInfoFrameAllocator;
@@ -61,12 +61,12 @@ fn many_boxes_long_lived()
     assert_eq!(*long_lived, 1);
 }
 
-fn kernel_start(boot_info: &'static BootInfo) -> !
+fn kernel_start(boot_info: &'static mut BootInfo) -> !
 {
     test_os::init();
-    let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
+    let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset.into_option().expect("physmem err"));
     let mut mapper = unsafe{memory::init(phys_mem_offset)};
-    let mut frame_allocator = unsafe{BootInfoFrameAllocator::init(&boot_info.memory_map)};
+    let mut frame_allocator = unsafe{BootInfoFrameAllocator::init(&boot_info.memory_regions)};
 
     allocator::init_heap(&mut mapper, &mut frame_allocator).expect("heap initialization failed");
     test_main();

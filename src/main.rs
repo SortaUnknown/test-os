@@ -7,28 +7,40 @@
 extern crate alloc;
 
 use core::panic::PanicInfo;
-use bootloader::{BootInfo, entry_point};
+use bootloader_api::{BootInfo, entry_point};
+use bootloader_api::config::{BootloaderConfig, Mapping};
 use x86_64::VirtAddr;
 use test_os::println;
+use test_os::FRAME_BUFFER;
 use test_os::memory;
 use test_os::memory::BootInfoFrameAllocator;
 use test_os::allocator;
 use test_os::task::Task;
 use test_os::task::executor::Executor;
 use test_os::task::keyboard::print_keypresses;
+use conquer_once::spin::OnceCell;
+use spin::Mutex;
 
-entry_point!(kernel_start);
+pub static BOOTLOADER_CONFIG: BootloaderConfig =
+{
+    let mut config = BootloaderConfig::new_default();
+    config.mappings.physical_memory = Some(Mapping::Dynamic);
+    config
+};
+
+entry_point!(kernel_start, config = &BOOTLOADER_CONFIG);
 
 //kernel entry point
-fn kernel_start(boot_info: &'static BootInfo) -> !
+fn kernel_start(boot_info: &'static mut BootInfo) -> !
 {
+    FRAME_BUFFER.lock() = boot_info.framebuffer.into_option().expect("framebuffer err");
     println!("Hello World{}", "!");
 
     test_os::init();
 
-    let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
+    let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset.into_option().expect("physmem err"));
     let mut mapper = unsafe{memory::init(phys_mem_offset)};
-    let mut frame_allocator = unsafe{BootInfoFrameAllocator::init(&boot_info.memory_map)};
+    let mut frame_allocator = unsafe{BootInfoFrameAllocator::init(&boot_info.memory_regions)};
 
     allocator::init_heap(&mut mapper, &mut frame_allocator).expect("heap initialization failed");
 

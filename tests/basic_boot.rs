@@ -6,7 +6,7 @@
 
 use core::panic::PanicInfo;
 use test_os::println;
-use bootloader::{BootInfo, entry_point};
+use bootloader_api::{BootInfo, entry_point};
 
 entry_point!(kernel_start);
 
@@ -16,7 +16,7 @@ fn test_println()
     println!("test_println output");
 }
 
-fn kernel_start(_boot_info: &'static BootInfo) -> !
+fn kernel_start(_boot_info: &'static mut BootInfo) -> !
 {
     test_main();
     

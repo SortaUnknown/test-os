@@ -15,7 +15,7 @@ simple executor is also interesting, but useless. prune in future
 **Updating deps**
 for fixed size allocator, usize can be cast to ptr safely
 volatile crate replaced with core::ptr::read_volatile() and write_volatile()
-bootloader full update requires major crate system rewrite, including dropping bootimage dep and changing the tests system, pushing back for now
+bootloader full update, framebuffer implementation: need to define static object with initial null state
 
-**Compiling for x86_64-unknown-none [NOGO]**
+**Compiling for x86_64-unknown-none**
 compile results in panic "Mapping(PageAlreadyMapped(PhysFrame[4KiB]))"

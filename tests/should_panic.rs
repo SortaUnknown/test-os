@@ -6,7 +6,7 @@
 
 use core::panic::PanicInfo;
 use test_os::{serial_print, serial_println, exit_qemu, QemuExitCode};
-use bootloader::{BootInfo, entry_point};
+use bootloader_api::{BootInfo, entry_point};
 
 entry_point!(kernel_start);
 
@@ -16,7 +16,7 @@ fn should_fail()
     assert_eq!(0, 1);
 }
 
-fn kernel_start(_boot_info: &'static BootInfo) -> !
+fn kernel_start(_boot_info: &'static mut BootInfo) -> !
 {
     should_fail();
     serial_println!("[test did not panic]");
