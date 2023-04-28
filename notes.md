@@ -16,7 +16,10 @@ simple executor is also interesting, but useless. prune in future
 for fixed size allocator, usize can be cast to ptr safely
 volatile crate replaced with core::ptr::read_volatile() and write_volatile()
 bootloader full update, framebuffer implementation: need to define static object with initial null state
-investigate replacing conquer_once oncecell with core oncecell
+investigate replacing conquer_once oncecell with core oncecell (currently non-thread safe)
 
 **Compiling for x86_64-unknown-none**
 compile results in panic "Mapping(PageAlreadyMapped(PhysFrame[4KiB]))"
+
+**Rust lang dev Points of Interest**
+std-Aware Cargo (https://github.com/rust-lang/wg-cargo-std-aware): Working Group behind built-std, currently very minimal implementation, ideally will allow to build custom implementations of the std library
