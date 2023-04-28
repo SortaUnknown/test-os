@@ -3,7 +3,7 @@ use x86_64::instructions::port::Port;
 use x86_64::registers::control::Cr2;
 use crate::{print, println, gdt, hlt_loop};
 use pic8259::ChainedPics;
-use spin::Mutex;
+use spin::{Mutex, Lazy};
 
 pub const PIC_1_OFFSET: u8 = 32;
 pub const PIC_2_OFFSET: u8 = PIC_1_OFFSET + 8;
@@ -31,7 +31,7 @@ impl InterruptIndex
     }
 }
 
-static IDT: InterruptDescriptorTable =
+static IDT: Lazy<InterruptDescriptorTable> = Lazy::new(||
 {
     let mut idt = InterruptDescriptorTable::new();
     idt.breakpoint.set_handler_fn(breakpoint_handler);
@@ -42,7 +42,7 @@ static IDT: InterruptDescriptorTable =
     idt[InterruptIndex::Keyboard.as_usize()].set_handler_fn(keyboard_interrupt_handler);
     idt.page_fault.set_handler_fn(page_fault_handler);
     idt
-};
+});
 
 pub fn init_idt()
 {

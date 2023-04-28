@@ -18,11 +18,11 @@ pub mod task;
 pub mod framebuffer;
 
 use core::panic::PanicInfo;
+use conquer_once::spin::OnceCell;
 use x86_64::instructions::port::Port;
 use bootloader_api::info::FrameBuffer;
-use spin::Mutex;
 
-pub static FRAME_BUFFER: Mutex<FrameBuffer> = None;
+pub static FRAME_BUFFER: OnceCell<FrameBuffer> = OnceCell::uninit();
 
 #[cfg(test)]
 use bootloader_api::{BootInfo, entry_point};

@@ -1,7 +1,7 @@
 use bootloader_api::info::FrameBufferInfo;
 use bootloader_api::info::PixelFormat;
 use noto_sans_mono_bitmap::{FontWeight, RasterHeight, RasterizedChar, get_raster, get_raster_width};
-use spin::Mutex;
+use spin::{Mutex, Lazy};
 use crate::FRAME_BUFFER;
 use core::fmt::Write;
 
@@ -14,7 +14,11 @@ const FONT_WEIGHT: FontWeight = FontWeight::Regular;
 const CHAR_RASTER_WIDTH: usize = get_raster_width(FONT_WEIGHT, CHAR_RASTER_HEIGHT);
 const BACKUP_CHAR: char = '�';
 
-static WRITER: Mutex<FrameBufferWriter> = Mutex::new(FrameBufferWriter::new(FRAME_BUFFER.lock().buffer_mut(), FRAME_BUFFER.lock().info()));
+static WRITER: Lazy<Mutex<FrameBufferWriter>> = Lazy::new(||
+{
+    Mutex::new(FrameBufferWriter::new(FRAME_BUFFER.get().expect("framebuffer not initialized").buffer_mut(), FRAME_BUFFER.get().expect("framebuffer not initialized").info()))
+});
+//static WRITER: Lazy<Mutex<FrameBufferWriter>> = Lazy::new(|| Mutex::new(FrameBufferWriter::new(unsafe{FRAME_BUFFER.get_unchecked()}.buffer_mut(), FRAME_BUFFER.get_unchecked().info())));
 
 fn get(c: char) -> Option<RasterizedChar>
 {

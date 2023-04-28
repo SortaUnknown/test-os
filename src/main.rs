@@ -7,6 +7,7 @@
 extern crate alloc;
 
 use core::panic::PanicInfo;
+use bootloader_api::info::MemoryRegions;
 use bootloader_api::{BootInfo, entry_point};
 use bootloader_api::config::{BootloaderConfig, Mapping};
 use x86_64::VirtAddr;
@@ -33,7 +34,7 @@ entry_point!(kernel_start, config = &BOOTLOADER_CONFIG);
 //kernel entry point
 fn kernel_start(boot_info: &'static mut BootInfo) -> !
 {
-    FRAME_BUFFER.lock() = boot_info.framebuffer.into_option().expect("framebuffer err");
+    FRAME_BUFFER.init_once(|| boot_info.framebuffer.into_option().expect("framebuffer err"));
     println!("Hello World{}", "!");
 
     test_os::init();
