@@ -4,7 +4,6 @@ use noto_sans_mono_bitmap::{FontWeight, RasterHeight, RasterizedChar, get_raster
 use spin::Mutex;
 use crate::FRAME_BUFFER;
 use core::fmt::Write;
-use lazy_static::lazy_static;
 
 const LINE_SPACING: usize = 2;
 const LETTER_SPACING: usize = 0;
@@ -15,7 +14,7 @@ const FONT_WEIGHT: FontWeight = FontWeight::Regular;
 const CHAR_RASTER_WIDTH: usize = get_raster_width(FONT_WEIGHT, CHAR_RASTER_HEIGHT);
 const BACKUP_CHAR: char = '�';
 
-lazy_static!{pub static ref WRITER: Mutex<FrameBufferWriter> = Mutex::new(FrameBufferWriter::new(FRAME_BUFFER.lock().buffer_mut(), FRAME_BUFFER.lock().info()));}
+static WRITER: Mutex<FrameBufferWriter> = Mutex::new(FrameBufferWriter::new(FRAME_BUFFER.lock().buffer_mut(), FRAME_BUFFER.lock().info()));
 
 fn get(c: char) -> Option<RasterizedChar>
 {

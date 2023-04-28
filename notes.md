@@ -16,6 +16,7 @@ simple executor is also interesting, but useless. prune in future
 for fixed size allocator, usize can be cast to ptr safely
 volatile crate replaced with core::ptr::read_volatile() and write_volatile()
 bootloader full update, framebuffer implementation: need to define static object with initial null state
+investigate replacing conquer_once oncecell with core oncecell
 
 **Compiling for x86_64-unknown-none**
 compile results in panic "Mapping(PageAlreadyMapped(PhysFrame[4KiB]))"
