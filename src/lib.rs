@@ -18,11 +18,14 @@ pub mod task;
 pub mod framebuffer;
 
 use core::panic::PanicInfo;
+use alloc::vec::Vec;
 use conquer_once::spin::OnceCell;
 use x86_64::instructions::port::Port;
 use bootloader_api::info::FrameBuffer;
 
-pub static FRAME_BUFFER: OnceCell<FrameBuffer> = OnceCell::uninit();
+pub static FRAME_BUFFER: OnceCell<&FrameBuffer> = OnceCell::uninit();
+
+pub static mut VEC: Vec<u8> = Vec::new();
 
 #[cfg(test)]
 use bootloader_api::{BootInfo, entry_point};

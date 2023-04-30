@@ -3,6 +3,7 @@ use bootloader_api::info::PixelFormat;
 use noto_sans_mono_bitmap::{FontWeight, RasterHeight, RasterizedChar, get_raster, get_raster_width};
 use spin::{Mutex, Lazy};
 use crate::FRAME_BUFFER;
+use crate::VEC;
 use core::fmt::Write;
 
 const LINE_SPACING: usize = 2;
@@ -16,9 +17,23 @@ const BACKUP_CHAR: char = '�';
 
 static WRITER: Lazy<Mutex<FrameBufferWriter>> = Lazy::new(||
 {
-    Mutex::new(FrameBufferWriter::new(FRAME_BUFFER.get().expect("framebuffer not initialized").buffer_mut(), FRAME_BUFFER.get().expect("framebuffer not initialized").info()))
+    let buf_ref: &[u8] = FRAME_BUFFER.get().expect("ass").buffer();
+    let buf_mut: &'static mut [u8] = unsafe{VEC.as_mut_slice()};
+    copy_slice(buf_mut, buf_ref);
+    let info = FRAME_BUFFER.get().expect("ass").info();
+    Mutex::new(FrameBufferWriter::new(buf_mut, info))
 });
-//static WRITER: Lazy<Mutex<FrameBufferWriter>> = Lazy::new(|| Mutex::new(FrameBufferWriter::new(unsafe{FRAME_BUFFER.get_unchecked()}.buffer_mut(), FRAME_BUFFER.get_unchecked().info())));
+
+fn copy_slice(dst: &mut [u8], src: &[u8]) -> usize
+{
+    let mut c = 0;
+    for (d, s) in dst.iter_mut().zip(src.iter())
+    {
+        *d = *s;
+        c += 1;
+    }
+    c
+}
 
 fn get(c: char) -> Option<RasterizedChar>
 {
