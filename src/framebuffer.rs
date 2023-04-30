@@ -1,5 +1,4 @@
-use bootloader_api::info::FrameBufferInfo;
-use bootloader_api::info::PixelFormat;
+use bootloader_api::info::{FrameBufferInfo, PixelFormat};
 use noto_sans_mono_bitmap::{FontWeight, RasterHeight, RasterizedChar, get_raster, get_raster_width};
 use spin::{Mutex, Lazy};
 use crate::FRAME_BUFFER;
@@ -17,8 +16,8 @@ const BACKUP_CHAR: char = '�';
 
 static WRITER: Lazy<Mutex<FrameBufferWriter>> = Lazy::new(||
 {
-    let buf_ref: &[u8] = FRAME_BUFFER.get().expect("ass").buffer();
-    let buf_mut: &'static mut [u8] = unsafe{VEC.as_mut_slice()};
+    let buf_ref = FRAME_BUFFER.get().expect("ass").buffer();
+    let buf_mut = unsafe{VEC.as_mut_slice()};
     copy_slice(buf_mut, buf_ref);
     let info = FRAME_BUFFER.get().expect("ass").info();
     Mutex::new(FrameBufferWriter::new(buf_mut, info))
