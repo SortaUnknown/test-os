@@ -3,7 +3,7 @@
 #![feature(abi_x86_interrupt)]
 
 use core::panic::PanicInfo;
-use test_os::{serial_print, serial_println, exit_qemu, QemuExitCode};
+use test_kernel::{serial_print, serial_println, exit_qemu, QemuExitCode};
 use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
 use bootloader_api::{BootInfo, entry_point};
 use spin::Lazy;
@@ -14,7 +14,7 @@ static TEST_IDT: Lazy<InterruptDescriptorTable> = Lazy::new(||
 {
     let mut idt = InterruptDescriptorTable::new();
 
-    unsafe{idt.double_fault.set_handler_fn(test_double_fault_handler).set_stack_index(test_os::gdt::DOUBLE_FAULT_IST_INDEX);}
+    unsafe{idt.double_fault.set_handler_fn(test_double_fault_handler).set_stack_index(test_kernel::gdt::DOUBLE_FAULT_IST_INDEX);}
 
     idt
 });
@@ -23,7 +23,7 @@ fn kernel_start(_boot_info: &'static mut BootInfo) -> !
 {
     serial_print!("stack_overflow::stack_overflow... ");
 
-    test_os::gdt::init();
+    test_kernel::gdt::init();
     init_test_idt();
 
     stack_overflow();
@@ -34,7 +34,7 @@ fn kernel_start(_boot_info: &'static mut BootInfo) -> !
 #[panic_handler]
 fn panic(info: &PanicInfo) -> !
 {
-    test_os::test_panic_handler(info);
+    test_kernel::test_panic_handler(info);
 }
 
 pub fn init_test_idt()
@@ -47,7 +47,7 @@ extern "x86-interrupt" fn test_double_fault_handler(_stack_frame: InterruptStack
     serial_println!("[ok]");
     exit_qemu(QemuExitCode::Success);
 
-    test_os::hlt_loop();
+    test_kernel::hlt_loop();
 }
 
 #[allow(unconditional_recursion)]

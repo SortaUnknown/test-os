@@ -1,7 +1,7 @@
 #![no_std] //don't link Rust std
 #![no_main] //disable all language-level entry points
 #![feature(custom_test_frameworks)]
-#![test_runner(test_os::test_runner)]
+#![test_runner(test_kernel::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
 extern crate alloc;
@@ -10,13 +10,12 @@ use core::panic::PanicInfo;
 use bootloader_api::{BootInfo, entry_point};
 use bootloader_api::config::{BootloaderConfig, Mapping};
 use x86_64::VirtAddr;
-use test_os::{FRAME_BUFFER, println};
-use test_os::memory;
-use test_os::memory::BootInfoFrameAllocator;
-use test_os::allocator;
-use test_os::task::Task;
-use test_os::task::executor::Executor;
-use test_os::task::keyboard::print_keypresses;
+use test_kernel::{FRAME_BUFFER, println};
+use test_kernel::memory;
+use test_kernel::memory::BootInfoFrameAllocator;
+use test_kernel::allocator;
+use test_kernel::task::Task;
+use test_kernel::task::executor::Executor;
 
 pub static BOOTLOADER_CONFIG: BootloaderConfig =
 {
@@ -33,7 +32,7 @@ fn kernel_start(boot_info: &'static mut BootInfo) -> !
     FRAME_BUFFER.init_once(|| boot_info.framebuffer.as_ref().expect("framebuffer err"));
     println!("Hello World{}", "!");
 
-    test_os::init();
+    test_kernel::init();
 
     let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset.into_option().expect("physmem err"));
     let mut mapper = unsafe{memory::init(phys_mem_offset)};
@@ -48,7 +47,7 @@ fn kernel_start(boot_info: &'static mut BootInfo) -> !
 
     let mut executor = Executor::new();
     executor.spawn(Task::new(example_task()));
-    executor.spawn(Task::new(print_keypresses()));
+    //executor.spawn(Task::new(print_keypresses()));
     executor.run();
 }
 
@@ -70,12 +69,12 @@ fn panic(info: &PanicInfo) -> !
 {
     println!("{}", info);
 
-    test_os::hlt_loop();
+    test_kernel::hlt_loop();
 }
 
 #[cfg(test)]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> !
 {
-    test_os::test_panic_handler(info);
+    test_kernel::test_panic_handler(info);
 }

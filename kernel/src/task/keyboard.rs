@@ -1,32 +1,30 @@
 use conquer_once::spin::OnceCell;
 use crossbeam_queue::ArrayQueue;
 use crate::{print, println};
-use core::pin::Pin;
-use core::task::{Poll, Context};
-use futures::stream::Stream;
-use futures::stream::StreamExt;
-use futures::task::AtomicWaker;
+//use futures::stream::Stream;
+//use futures::stream::StreamExt;
+//use futures::task::AtomicWaker;
 use pc_keyboard::{DecodedKey, HandleControl, Keyboard, ScancodeSet1};
 
 static SCANCODE_QUEUE: OnceCell<ArrayQueue<u8>> = OnceCell::uninit();
-static WAKER: AtomicWaker = AtomicWaker::new();
+//static WAKER: AtomicWaker = AtomicWaker::new();
 
 pub(crate) fn add_scancode(scancode: u8)
 {
     if let Ok(queue) = SCANCODE_QUEUE.try_get()
     {
         if let Err(_) = queue.push(scancode) {println!("WARNING: scancode queue full; dropping keyboard input");}
-        else {WAKER.wake();}
+        //else {WAKER.wake();}
     }
     else {println!("WARNING: scancode queue uninitialized");}
 }
 
-pub async fn print_keypresses()
+pub fn print_keypresses()
 {
-    let mut scancodes = ScancodeStream::new();
+    SCANCODE_QUEUE.try_init_once(|| ArrayQueue::new(100)).expect("ScancodeStream::new should only be called once");
     let mut keyboard = Keyboard::new(ScancodeSet1::new(), pc_keyboard::layouts::Uk105Key, HandleControl::Ignore);
 
-    while let Some(scancode) = scancodes.next().await
+    while let Some(scancode) = SCANCODE_QUEUE.get().expect("hrr").pop()
     {
         if let Ok(Some(key_event)) = keyboard.add_byte(scancode)
         {
@@ -55,7 +53,7 @@ impl ScancodeStream
         ScancodeStream{_private: ()}
     }
 
-    fn poll_next(self: Pin<&mut self>, cx: &mut Context) -> Poll<Option<u8>>
+    /*pub fn poll_next(self: Pin<&mut self>, cx: &mut Context) -> Poll<Option<u8>>
     {
         let queue = SCANCODE_QUEUE.try_get().expect("not initialized");
 
@@ -72,7 +70,7 @@ impl ScancodeStream
             }
             None => Poll::Pending
         }
-    }
+    }*/
 }
 
 /*impl Stream for ScancodeStream

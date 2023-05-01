@@ -5,7 +5,7 @@
 #![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
-use test_os::{serial_print, serial_println, exit_qemu, QemuExitCode};
+use test_kernel::{serial_print, serial_println, exit_qemu, QemuExitCode};
 use bootloader_api::{BootInfo, entry_point};
 
 entry_point!(kernel_start);
@@ -22,7 +22,7 @@ fn kernel_start(_boot_info: &'static mut BootInfo) -> !
     serial_println!("[test did not panic]");
     exit_qemu(QemuExitCode::Failed);
     
-    test_os::hlt_loop();
+    test_kernel::hlt_loop();
 }
 
 #[panic_handler]
@@ -30,5 +30,5 @@ fn panic(info: &PanicInfo) -> !
 {
     serial_println!("[ok]");
     exit_qemu(QemuExitCode::Success);
-    test_os::test_panic_handler(info);
+    test_kernel::test_panic_handler(info);
 }
