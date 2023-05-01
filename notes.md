@@ -16,6 +16,8 @@ simple executor is also interesting, but useless. prune in future
 for fixed size allocator, usize can be cast to ptr safely
 volatile crate replaced with core::ptr::read_volatile() and write_volatile()
 investigate replacing conquer_once oncecell with core oncecell (currently non-thread safe)
+the ability to do QEMU tests appears to have been broken with the most recent bootloader, with no proper replacement currently (see https://github.com/rust-osdev/bootloader/issues/366)
+futures crate seems to suddenly have a stroke, probs reimplement stream from scratch
 
 **Compiling for x86_64-unknown-none**
 compile results in panic "Mapping(PageAlreadyMapped(PhysFrame[4KiB]))"
@@ -26,3 +28,4 @@ std-Aware Cargo (https://github.com/rust-lang/wg-cargo-std-aware): Working Group
 **Unstable features Reference**
 x86-interrupt: Lang 40180 (https://github.com/rust-lang/rust/issues/40180)
 const mut refs: Lang 57349 (https://github.com/rust-lang/rust/issues/57349)
+custom test frameworks: Lang 50297 (https://github.com/rust-lang/rust/issues/50297) (closed and with no proper replacement)
