@@ -1,35 +1,28 @@
 [package]
-name = "test-kernel"
+name = "kernel"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[[bin]]
+name = "kernel"
+test = false
+bench = false
 
 [dependencies]
 bootloader_api = "0.11.3"
-linked_list_allocator = "0.10.5"
-noto-sans-mono-bitmap = "0.2.0"
-pc-keyboard = "0.7.0"
-pic8259 = "0.10.4"
+x86_64 = "0.14.10"
 spin = "0.9.8"
 uart_16550 = "0.2.18"
-x86_64 = "0.14.10"
-
-[dependencies.crossbeam-queue]
-version = "0.3.8"
-default-features = false
-features = ["alloc"]
+pic8259 = "0.10.4"
+pc-keyboard = "0.7.0"
+noto-sans-mono-bitmap = "0.2.0"
+linked_list_allocator = "0.10.5"
 
 [dependencies.conquer-once]
 version = "0.4.0"
 default-features = false
 
-
-
-[[test]]
-name = "should_panic"
-harness = false
-
-[[test]]
-name = "stack_overflow"
-harness = false
+[dependencies.crossbeam-queue]
+version = "0.3.8"
+default-features = false
+features = ["alloc"]

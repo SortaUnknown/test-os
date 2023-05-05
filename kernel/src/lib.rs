@@ -1,8 +1,8 @@
 #![no_std]
 #![cfg_attr(test, no_main)]
-#![feature(custom_test_frameworks)]
+/*#![feature(custom_test_frameworks)]
 #![test_runner(crate::test_runner)]
-#![reexport_test_harness_main = "test_main"]
+#![reexport_test_harness_main = "test_main"]*/
 #![feature(abi_x86_interrupt)]
 #![feature(const_mut_refs)]
 
@@ -17,9 +17,9 @@ pub mod allocator;
 pub mod task;
 pub mod framebuffer;
 
-use core::panic::PanicInfo;
+//use core::panic::PanicInfo;
 use conquer_once::spin::OnceCell;
-use x86_64::instructions::port::Port;
+//use x86_64::instructions::port::Port;
 use bootloader_api::info::FrameBuffer;
 use alloc::vec::Vec;
 
@@ -27,11 +27,11 @@ pub static FRAME_BUFFER: OnceCell<&FrameBuffer> = OnceCell::uninit();
 
 pub static mut VEC: Vec<u8> = Vec::new();
 
-#[cfg(test)]
+/*#[cfg(test)]
 use bootloader_api::{BootInfo, entry_point};
 
 #[cfg(test)]
-entry_point!(kernel_start);
+entry_point!(kernel_start);*/
 
 pub fn init()
 {
@@ -48,7 +48,7 @@ pub fn hlt_loop() -> !
     loop{x86_64::instructions::hlt();}
 }
 
-pub trait Testable
+/*pub trait Testable
 {
     fn run(&self) -> ();
 }
@@ -114,4 +114,4 @@ pub fn exit_qemu(exit_code: QemuExitCode)
         let mut port = Port::new(0xf4);
         port.write(exit_code as u32);
     }
-}
+}*/
