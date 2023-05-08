@@ -16,6 +16,7 @@ const BACKUP_CHAR: char = '�';
 
 static WRITER: Lazy<Mutex<FrameBufferWriter>> = Lazy::new(||
 {
+    //let b = FRAME_BUFFER.get().expect("ass").buffer().
     let buf_ref = FRAME_BUFFER.get().expect("ass").buffer();
     let buf_mut = unsafe{VEC.as_mut_slice()};
     copy_slice(buf_mut, buf_ref);

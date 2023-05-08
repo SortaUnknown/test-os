@@ -29,7 +29,7 @@ entry_point!(kernel_start, config = &BOOTLOADER_CONFIG);
 //kernel entry point
 fn kernel_start(boot_info: &'static mut BootInfo) -> !
 {
-    FRAME_BUFFER.init_once(|| boot_info.framebuffer.as_ref().expect("framebuffer err"));
+    FRAME_BUFFER.init_once(|| boot_info.framebuffer.as_mut().expect("framebuffer err"));
     println!("Hello World{}", "!");
 
     kernel::init();
@@ -47,7 +47,7 @@ fn kernel_start(boot_info: &'static mut BootInfo) -> !
 
     let mut executor = Executor::new();
     executor.spawn(Task::new(example_task()));
-    //executor.spawn(Task::new(print_keypresses()));
+    executor.spawn(Task::new(kernel::task::keyboard::print_keypresses()));
     executor.run();
 }
 

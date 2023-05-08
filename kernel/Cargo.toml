@@ -26,3 +26,8 @@ default-features = false
 version = "0.3.8"
 default-features = false
 features = ["alloc"]
+
+[dependencies.futures-util]
+version = "0.3.28"
+default-features = false
+features = ["alloc"]

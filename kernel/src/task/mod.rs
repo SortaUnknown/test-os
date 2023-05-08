@@ -1,5 +1,5 @@
 pub mod executor;
-//pub mod keyboard;
+pub mod keyboard;
 
 use core::future::Future;
 use core::pin::Pin;

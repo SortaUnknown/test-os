@@ -23,7 +23,7 @@ use conquer_once::spin::OnceCell;
 use bootloader_api::info::FrameBuffer;
 use alloc::vec::Vec;
 
-pub static FRAME_BUFFER: OnceCell<&FrameBuffer> = OnceCell::uninit();
+pub static FRAME_BUFFER: OnceCell<&mut FrameBuffer> = OnceCell::uninit();
 
 pub static mut VEC: Vec<u8> = Vec::new();
 

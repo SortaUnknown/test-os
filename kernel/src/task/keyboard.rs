@@ -1,30 +1,33 @@
 use conquer_once::spin::OnceCell;
 use crossbeam_queue::ArrayQueue;
 use crate::{print, println};
-//use futures::stream::Stream;
-//use futures::stream::StreamExt;
-//use futures::task::AtomicWaker;
+use core::pin::Pin;
+use core::task::Context;
+use core::task::Poll;
+use futures_util::stream::Stream;
+use futures_util::stream::StreamExt;
+use futures_util::task::AtomicWaker;
 use pc_keyboard::{DecodedKey, HandleControl, Keyboard, ScancodeSet1};
 
 static SCANCODE_QUEUE: OnceCell<ArrayQueue<u8>> = OnceCell::uninit();
-//static WAKER: AtomicWaker = AtomicWaker::new();
+static WAKER: AtomicWaker = AtomicWaker::new();
 
 pub(crate) fn add_scancode(scancode: u8)
 {
     if let Ok(queue) = SCANCODE_QUEUE.try_get()
     {
         if let Err(_) = queue.push(scancode) {println!("WARNING: scancode queue full; dropping keyboard input");}
-        //else {WAKER.wake();}
+        else {WAKER.wake();}
     }
     else {println!("WARNING: scancode queue uninitialized");}
 }
 
-pub fn print_keypresses()
+pub async fn print_keypresses()
 {
-    SCANCODE_QUEUE.try_init_once(|| ArrayQueue::new(100)).expect("ScancodeStream::new should only be called once");
+    let mut scancodes = ScancodeStream::new();
     let mut keyboard = Keyboard::new(ScancodeSet1::new(), pc_keyboard::layouts::Uk105Key, HandleControl::Ignore);
 
-    while let Some(scancode) = SCANCODE_QUEUE.get().expect("hrr").pop()
+    while let Some(scancode) = scancodes.next().await
     {
         if let Ok(Some(key_event)) = keyboard.add_byte(scancode)
         {
@@ -52,28 +55,9 @@ impl ScancodeStream
         SCANCODE_QUEUE.try_init_once(|| ArrayQueue::new(100)).expect("ScancodeStream::new should only be called once");
         ScancodeStream{_private: ()}
     }
-
-    /*pub fn poll_next(self: Pin<&mut self>, cx: &mut Context) -> Poll<Option<u8>>
-    {
-        let queue = SCANCODE_QUEUE.try_get().expect("not initialized");
-
-        //fast path
-        if let Some(scancode) = queue.pop() {return Poll::Ready(Some(scancode));}
-
-        WAKER.register(cx.waker());
-        match queue.pop()
-        {
-            Some(scancode) =>
-            {
-                WAKER.take();
-                Poll::Ready(Some(scancode))
-            }
-            None => Poll::Pending
-        }
-    }*/
 }
 
-/*impl Stream for ScancodeStream
+impl Stream for ScancodeStream
 {
     type Item = u8;
 
@@ -95,4 +79,4 @@ impl ScancodeStream
             None => Poll::Pending
         }
     }
-}*/
+}
