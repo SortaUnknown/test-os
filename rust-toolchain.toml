@@ -1,5 +1,5 @@
 [toolchain]
-channel = "nightly-2023-05-01"
+channel = "nightly"
 profile = "default"
 targets = ["x86_64-unknown-none"]
 components = ["rust-src", "llvm-tools-preview"]
