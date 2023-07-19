@@ -17,10 +17,6 @@ for fixed size allocator, usize can be cast to ptr safely
 volatile crate replaced with core::ptr::read_volatile() and write_volatile()
 investigate replacing conquer_once oncecell with core oncecell (currently non-thread safe)
 the ability to do QEMU tests appears to have been broken with the most recent bootloader, with no proper replacement currently (see https://github.com/rust-osdev/bootloader/issues/366)
-futures crate seems to suddenly have a stroke, probs reimplement stream from scratch
-
-**Compiling for x86_64-unknown-none**
-compile results in panic "Mapping(PageAlreadyMapped(PhysFrame[4KiB]))"
 
 **Rust lang dev Points of Interest**
 std-Aware Cargo (https://github.com/rust-lang/wg-cargo-std-aware): Working Group behind built-std, currently very minimal implementation, ideally will allow to build custom implementations of the std library

@@ -1,6 +1,5 @@
 use conquer_once::spin::OnceCell;
 use crossbeam_queue::ArrayQueue;
-use crate::{print, println};
 use core::pin::Pin;
 use core::task::Context;
 use core::task::Poll;
@@ -8,6 +7,7 @@ use futures_util::stream::Stream;
 use futures_util::stream::StreamExt;
 use futures_util::task::AtomicWaker;
 use pc_keyboard::{DecodedKey, HandleControl, Keyboard, ScancodeSet1};
+use log::{info, warn};
 
 static SCANCODE_QUEUE: OnceCell<ArrayQueue<u8>> = OnceCell::uninit();
 static WAKER: AtomicWaker = AtomicWaker::new();
@@ -16,10 +16,10 @@ pub(crate) fn add_scancode(scancode: u8)
 {
     if let Ok(queue) = SCANCODE_QUEUE.try_get()
     {
-        if let Err(_) = queue.push(scancode) {println!("WARNING: scancode queue full; dropping keyboard input");}
+        if let Err(_) = queue.push(scancode) {warn!("WARNING: scancode queue full; dropping keyboard input");}
         else {WAKER.wake();}
     }
-    else {println!("WARNING: scancode queue uninitialized");}
+    else {warn!("WARNING: scancode queue uninitialized");}
 }
 
 pub async fn print_keypresses()
@@ -35,8 +35,8 @@ pub async fn print_keypresses()
             {
                 match key
                 {
-                    DecodedKey::Unicode(character) => print!("{}", character),
-                    DecodedKey::RawKey(key) => print!("{:?}", key)
+                    DecodedKey::Unicode(character) => info!("{}", character),
+                    DecodedKey::RawKey(key) => info!("{:?}", key)
                 }
             }
         }

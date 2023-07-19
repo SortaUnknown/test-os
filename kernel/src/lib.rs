@@ -15,17 +15,15 @@ pub mod gdt;
 pub mod memory;
 pub mod allocator;
 pub mod task;
-pub mod framebuffer;
+//pub mod framebuffer;
 
 //use core::panic::PanicInfo;
 use conquer_once::spin::OnceCell;
 //use x86_64::instructions::port::Port;
-use bootloader_api::info::FrameBuffer;
-use alloc::vec::Vec;
+use bootloader_api::info::FrameBufferInfo;
+use bootloader_x86_64_common::logger::LockedLogger;
 
-pub static FRAME_BUFFER: OnceCell<&mut FrameBuffer> = OnceCell::uninit();
-
-pub static mut VEC: Vec<u8> = Vec::new();
+pub static LOGGER: OnceCell<LockedLogger> = OnceCell::uninit();
 
 /*#[cfg(test)]
 use bootloader_api::{BootInfo, entry_point};
@@ -46,6 +44,13 @@ pub fn init()
 pub fn hlt_loop() -> !
 {
     loop{x86_64::instructions::hlt();}
+}
+
+pub fn init_logger(buffer: &'static mut [u8], info: FrameBufferInfo)
+{
+    let logger = LOGGER.get_or_init(move || LockedLogger::new(buffer, info, true, false));
+    log::set_logger(logger).expect("Logger already set");
+    log::set_max_level(log::LevelFilter::Trace);
 }
 
 /*pub trait Testable

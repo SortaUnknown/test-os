@@ -1,4 +1,4 @@
-use bootloader_api::info::{FrameBufferInfo, PixelFormat};
+/*use bootloader_api::info::{FrameBufferInfo, PixelFormat};
 use noto_sans_mono_bitmap::{FontWeight, RasterHeight, RasterizedChar, get_raster, get_raster_width};
 use spin::{Mutex, Lazy};
 use crate::FRAME_BUFFER;
@@ -151,7 +151,7 @@ impl core::fmt::Write for FrameBufferWriter
         }
         Ok(())
     }
-}
+}*/
 
 #[macro_export]
 macro_rules! print
@@ -169,5 +169,5 @@ macro_rules! println
 #[doc(hidden)]
 pub fn _print(args: core::fmt::Arguments)
 {
-    x86_64::instructions::interrupts::without_interrupts(|| {WRITER.lock().write_fmt(args).unwrap();});
+    x86_64::instructions::interrupts::without_interrupts(|| {log::info!("{}", args);});
 }
