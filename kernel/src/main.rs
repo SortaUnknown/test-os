@@ -1,8 +1,5 @@
 #![no_std] //don't link Rust std
 #![no_main] //disable all language-level entry points
-/*#![feature(custom_test_frameworks)]
-#![test_runner(kernel::test_runner)]
-#![reexport_test_harness_main = "test_main"]*/
 
 extern crate alloc;
 
@@ -45,9 +42,6 @@ fn kernel_start(boot_info: &'static mut BootInfo) -> !
 
     allocator::init_heap(&mut mapper, &mut frame_allocator).expect("heap initialization failed");
 
-    /*#[cfg(test)]
-    test_main();*/
-
     info!("End of Kernel");
 
     let mut executor = Executor::new();
@@ -67,8 +61,6 @@ async fn example_task()
     info!("async number: {}", number);
 }
 
-//default panic
-//#[cfg(not(test))]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> !
 {
@@ -76,10 +68,3 @@ fn panic(info: &PanicInfo) -> !
 
     kernel::hlt_loop();
 }
-
-/*#[cfg(test)]
-#[panic_handler]
-fn panic(info: &PanicInfo) -> !
-{
-    kernel::test_panic_handler(info);
-}*/
