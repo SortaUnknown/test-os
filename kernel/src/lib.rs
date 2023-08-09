@@ -16,6 +16,7 @@ pub mod memory;
 pub mod allocator;
 pub mod task;
 //pub mod framebuffer;
+//pub mod logger;
 
 //use core::panic::PanicInfo;
 use conquer_once::spin::OnceCell;
