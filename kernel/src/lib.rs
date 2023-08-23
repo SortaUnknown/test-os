@@ -15,8 +15,11 @@ pub mod task;
 use conquer_once::spin::OnceCell;
 use bootloader_api::info::FrameBufferInfo;
 use bootloader_x86_64_common::logger::LockedLogger;
+use alloc::vec::Vec;
+use spin::Mutex;
 
 pub static LOGGER: OnceCell<LockedLogger> = OnceCell::uninit();
+pub static FEED: Mutex<Vec<char>> = Mutex::new(Vec::new());
 
 pub fn init()
 {

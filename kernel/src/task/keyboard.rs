@@ -8,6 +8,7 @@ use futures_util::stream::StreamExt;
 use futures_util::task::AtomicWaker;
 use pc_keyboard::{DecodedKey, HandleControl, Keyboard, ScancodeSet1};
 use log::{info, warn};
+use alloc::string::String;
 
 static SCANCODE_QUEUE: OnceCell<ArrayQueue<u8>> = OnceCell::uninit();
 static WAKER: AtomicWaker = AtomicWaker::new();
@@ -35,8 +36,20 @@ pub async fn print_keypresses()
             {
                 match key
                 {
-                    DecodedKey::Unicode(character) => info!("{}", character),
-                    DecodedKey::RawKey(key) => info!("{:?}", key)
+                    DecodedKey::Unicode(character) =>
+                    {
+                        info!("{}", character);
+                        crate::FEED.lock().push(character);
+                    },
+                    DecodedKey::RawKey(key) =>
+                    {
+                        info!("{:?}", key);
+                        if key == pc_keyboard::KeyCode::LControl
+                        {
+                            info!("{}", crate::FEED.lock().iter().cloned().collect::<String>());
+                            crate::FEED.lock().clear();
+                        }
+                    }
                 }
             }
         }
