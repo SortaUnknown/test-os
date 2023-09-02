@@ -16,8 +16,7 @@ pub struct File
 pub struct FilePermissions
 {
     read_privileged: bool,
-    write_delete_privileged: bool,
-    execute_with_privilege: bool
+    write_delete_privileged: bool
 }
 
 pub struct FileDates
@@ -31,7 +30,7 @@ impl File
 {
     pub const fn create() -> Self
     {
-        let permissions = FilePermissions{read_privileged: false, write_delete_privileged: false, execute_with_privilege: false};
+        let permissions = FilePermissions{read_privileged: false, write_delete_privileged: false};
         let dates = FileDates{create_date: 0, modify_date: 0, access_date: 0};
         File{data: Vec::new(), permissions, dates}
     }
@@ -64,12 +63,7 @@ impl File
             if let Some(val) = write {val}
             else {self.permissions.write_delete_privileged}
         };
-        let execute_with_privilege =
-        {
-            if let Some(val) = privilege_execute {val}
-            else {self.permissions.execute_with_privilege}
-        };
-        self.permissions = FilePermissions{read_privileged, write_delete_privileged, execute_with_privilege};
+        self.permissions = FilePermissions{read_privileged, write_delete_privileged};
         Ok(())
     }
 }
