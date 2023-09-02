@@ -11,6 +11,7 @@ pub mod gdt;
 pub mod memory;
 pub mod allocator;
 pub mod task;
+pub mod fs;
 
 use conquer_once::spin::OnceCell;
 use bootloader_api::info::FrameBufferInfo;
