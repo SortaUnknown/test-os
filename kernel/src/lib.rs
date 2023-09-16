@@ -16,6 +16,7 @@ pub mod device;
 pub mod syscall;
 pub mod time;
 pub mod rand;
+pub mod proc;
 
 use conquer_once::spin::OnceCell;
 use bootloader_api::info::FrameBufferInfo;

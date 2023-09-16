@@ -19,6 +19,7 @@ bootloader-x86_64-common = "0.11.4"
 ata_x86 = "0.1.1"
 embedded-io = "0.5"
 cmos-rtc = "0.1.2"
+xmas-elf = "0.9"
 
 [dependencies.conquer-once]
 version = "0.4.0"
@@ -41,3 +42,8 @@ default-features = false
 [dependencies.chrono]
 version = "0.4.30"
 default-features = false
+
+[dependencies.iced-x86]
+version = "1.20"
+default-features = false
+features = ["no_std", "decoder", "nasm"]
