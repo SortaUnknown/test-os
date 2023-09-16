@@ -13,6 +13,9 @@ pub mod allocator;
 pub mod task;
 pub mod fs;
 pub mod device;
+pub mod syscall;
+pub mod time;
+pub mod rand;
 
 use conquer_once::spin::OnceCell;
 use bootloader_api::info::FrameBufferInfo;

@@ -3,9 +3,22 @@ use super::DeviceError;
 use alloc::vec::Vec;
 use alloc::vec;
 
+pub fn init_test() -> AtaStream
+{
+    AtaStream{cursor: 0}
+}
+
 pub struct AtaStream
 {
     cursor: u64
+}
+
+impl AtaStream
+{
+    pub const fn new() -> Self
+    {
+        AtaStream{cursor: 0}
+    }
 }
 
 impl super::DeviceStream for AtaStream

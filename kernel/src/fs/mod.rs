@@ -1,9 +1,14 @@
 //mod fatfs;
 //mod ntfs;
-mod testfs;
+pub mod testfs;
 
 use alloc::vec::Vec;
 use embedded_io::ErrorKind;
+use spin::{Mutex, Lazy};
+use testfs::TestFS;
+use crate::device::ata::AtaStream;
+
+pub static FILESYSTEM: Lazy<Mutex<TestFS<AtaStream>>> = Lazy::new(|| Mutex::new(TestFS::init(AtaStream::new())));
 
 #[derive(Default)]
 pub struct FilePermissions
@@ -125,9 +130,9 @@ impl File
     }
 }
 
-pub trait FileSystem
+pub trait FileSystem<T>
 {
-    fn init(device: &'static mut dyn crate::device::DeviceStream) -> Self;
+    fn init(device: T) -> Self;
 
     fn get_perms(&mut self, path: &str) -> Result<FilePermissions, ErrorKind>;
     fn write_perms(&mut self, path: &str, perms: FilePermissions) -> Result<(), ErrorKind>;

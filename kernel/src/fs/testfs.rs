@@ -88,14 +88,14 @@ impl MetadataBlock
     }
 }
 
-pub struct TestFS
+pub struct TestFS<T: DeviceStream + 'static>
 {
     free_data_block: u64,
     free_file_block: u64,
-    device: &'static mut dyn DeviceStream
+    device: T
 }
 
-impl TestFS
+impl<T> TestFS<T> where T: DeviceStream
 {
     fn find_file(&mut self, path: &str) -> Result<(MetadataBlock, u32), ErrorKind>
     {
@@ -111,11 +111,12 @@ impl TestFS
 }
 }
 
-impl super::FileSystem for TestFS
+impl<T> super::FileSystem<T> for TestFS<T> where T: DeviceStream
 {
-    fn init(device: &'static mut dyn DeviceStream) -> Self
+    fn init(mut device: T) -> Self
     {
         let mut buf = [0u8; 8];
+        //let device = device.get_mut();
         device.seek(SeekFrom::Start(0)).unwrap();
         device.read(&mut buf).unwrap();
         let free_data_block = u64::from_le_bytes(buf);

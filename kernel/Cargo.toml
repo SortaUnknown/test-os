@@ -18,6 +18,7 @@ linked_list_allocator = "0.10.5"
 bootloader-x86_64-common = "0.11.4"
 ata_x86 = "0.1.1"
 embedded-io = "0.5"
+cmos-rtc = "0.1.2"
 
 [dependencies.conquer-once]
 version = "0.4.0"
@@ -35,4 +36,8 @@ features = ["alloc"]
 
 [dependencies.log]
 version = "0.4.17"
+default-features = false
+
+[dependencies.chrono]
+version = "0.4.30"
 default-features = false

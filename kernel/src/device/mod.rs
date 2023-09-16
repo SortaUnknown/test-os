@@ -1,6 +1,14 @@
-mod ata;
+pub mod ata;
 
 use embedded_io::{Read, Write, Seek, SeekFrom, Error, ErrorType, ErrorKind};
+use spin::Mutex;
+
+pub static ATA_DEVICE: Mutex<ata::AtaStream> = Mutex::new(ata::AtaStream::new());
+
+pub fn test_init() -> ata::AtaStream
+{
+    ata::init_test()
+}
 
 #[derive(Debug)]
 pub struct DeviceError
