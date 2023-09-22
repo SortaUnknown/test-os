@@ -2,6 +2,8 @@
 #![cfg_attr(test, no_main)]
 #![feature(abi_x86_interrupt)]
 #![feature(const_mut_refs)]
+#![feature(fn_ptr_trait)]
+#![feature(strict_provenance)]
 
 extern crate alloc;
 
@@ -17,6 +19,7 @@ pub mod syscall;
 pub mod time;
 pub mod rand;
 pub mod proc;
+pub mod proc_watch;
 
 use conquer_once::spin::OnceCell;
 use bootloader_api::info::FrameBufferInfo;
